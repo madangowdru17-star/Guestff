@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HEX CHEATS OFC — Guest Generator</title>
+<style>
+  :root {
+    --bg: #0a0a12;
+    --panel: #12121c;
+    --border: #1e1e2e;
+    --accent: #00ffcc;
+    --accent2: #ff00aa;
+    --text: #e0e0ee;
+    --muted: #6b6b8a;
+    --ok: #00ff88;
+    --err: #ff3366;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Courier New', ui-monospace, monospace;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    padding: 24px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: linear-gradient(180deg, #0d0d18 0%, #08080f 100%);
+    margin-bottom: 20px;
+  }
+  header h1 {
+    font-size: 28px;
+    letter-spacing: 6px;
+    color: var(--accent);
+    text-shadow: 0 0 12px rgba(0,255,204,0.5);
+    margin-bottom: 6px;
+  }
+  header .sub {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+  header .brand-links {
+    margin-top: 10px;
+    font-size: 12px;
+  }
+  header .brand-links a {
+    color: var(--accent2);
+    text-decoration: none;
+    margin: 0 8px;
+  }
+  header .brand-links a:hover { text-decoration: underline; }
+
+  /* GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .panel h2 {
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+
+  label {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    margin: 10px 0 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  input, select {
+    width: 100%;
+    padding: 10px 12px;
+    background: #0a0a12;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: border 0.2s;
+  }
+  input:focus, select:focus { border-color: var(--accent); }
+
+  .row { display: flex; gap: 10px; }
+  .row > div { flex: 1; }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 18px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-weight: bold;
+    letter-spacing: 3px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.2s;
+  }
+  button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0,255,204,0.3);
+  }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  button.stop {
+    background: linear-gradient(90deg, #ff3366 0%, #ff6b00 100%);
+    margin-top: 10px;
+  }
+  button.dl {
+    background: #1e1e2e;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+
+  /* STATS */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .stat {
+    background: #0a0a12;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stat .val {
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: bold;
+  }
+  .stat .lbl {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    margin-top: 4px;
+  }
+  .stat.rare .val { color: #ffcc00; }
+  .stat.couples .val { color: var(--accent2); }
+  .stat.err .val { color: var(--err); }
+
+  /* PROGRESS */
+  .prog {
+    height: 8px;
+    background: #0a0a12;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 12px 0;
+    border: 1px solid var(--border);
+  }
+  .prog-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.3s;
+  }
+
+  /* LOGS */
+  .log-box {
+    background: #06060c;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 12px;
+    max-height: 420px;
+    overflow-y: auto;
+    line-height: 1.5;
+  }
+  .log-box .l { color: var(--muted); }
+  .log-box .ok { color: var(--ok); }
+  .log-box .err { color: var(--err); }
+  .log-box .info { color: var(--accent); }
+  .log-box div { word-break: break-all; }
+
+  .footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+  .footer a { color: var(--accent2); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>◈ HEX CHEATS OFC ◈</h1>
+    <div class="sub">GUEST ACCOUNT GENERATOR · OB55 · FAST ENGINE</div>
+    <div class="brand-links">
+      <a href="https://t.me/+sL3xBoiSrVZmYWI9" target="_blank">Channel</a> ·
+      <a href="https://t.me/HeX_CiPhEr" target="_blank">@HeX_CiPhEr</a>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- LEFT: CONFIG -->
+    <div class="panel">
+      <h2>▸ CONFIGURATION</h2>
+
+      <label>Region</label>
+      <select id="region">
+        <option value="IND">IND — India</option>
+        <option value="BD">BD — Bangladesh</option>
+        <option value="PK">PK — Pakistan</option>
+        <option value="ID">ID — Indonesia</option>
+        <option value="ME">ME — Middle East</option>
+        <option value="TH">TH — Thailand</option>
+        <option value="VN">VN — Vietnam</option>
+        <option value="CIS">CIS — Russia</option>
+        <option value="SAC">SAC — Spanish</option>
+        <option value="BR">BR — Brazil (GHOST)</option>
+      </select>
+
+      <label>Name Prefix</label>
+      <input id="prefix" value="HEX" maxlength="20" />
+
+      <label>Password Prefix</label>
+      <input id="pwd_prefix" value="hex" maxlength="20" />
+
+      <div class="row">
+        <div>
+          <label>Count</label>
+          <input id="count" type="number" value="50" min="1" max="5000" />
+        </div>
+        <div>
+          <label>Threads</label>
+          <input id="threads" type="number" value="40" min="1" max="200" />
+        </div>
+      </div>
+
+      <label>Rarity Threshold (1-10)</label>
+      <input id="rarity" type="number" value="8" min="1" max="10" />
+
+      <button id="startBtn">▶ START GENERATION</button>
+      <button id="stopBtn" class="stop" style="display:none;">■ STOP</button>
+      <button id="dlBtn" class="dl" style="display:none;">⤓ DOWNLOAD JSON</button>
+    </div>
+
+    <!-- RIGHT: DASHBOARD -->
+    <div class="panel">
+      <h2>▸ LIVE DASHBOARD</h2>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="val" id="s_success">0</div>
+          <div class="lbl">GENERATED</div>
+        </div>
+        <div class="stat err">
+          <div class="val" id="s_failed">0</div>
+          <div class="lbl">FAILED</div>
+        </div>
+        <div class="stat rare">
+          <div class="val" id="s_rare">0</div>
+          <div class="lbl">RARE</div>
+        </div>
+        <div class="stat couples">
+          <div class="val" id="s_couples">0</div>
+          <div class="lbl">COUPLES</div>
+        </div>
+      </div>
+
+      <div class="prog"><div class="prog-bar" id="progBar"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);">
+        <span id="progText">0 / 0</span>
+        <span id="rateText">0.00/s · 0s</span>
+      </div>
+
+      <label style="margin-top:16px;">▸ LIVE LOG</label>
+      <div class="log-box" id="logBox">
+        <div class="l">// awaiting job start...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    HEX CHEATS OFC · @HeX_CiPhEr · <a href="https://t.me/+sL3xBoiSrVZmYWI9" target="_blank">t.me/+sL3xBoiSrVZmYWI9</a>
+  </div>
+
+</div>
+
+<script>
+let currentJob = null;
+let pollTimer = null;
+
+const $ = (id) => document.getElementById(id);
+
+$("startBtn").addEventListener("click", async () => {
+  const payload = {
+    region: $("region").value,
+    prefix: $("prefix").value.trim() || "HEX",
+    pwd_prefix: $("pwd_prefix").value.trim() || "hex",
+    count: parseInt($("count").value) || 10,
+    threads: parseInt($("threads").value) || 30,
+    rarity_threshold: parseInt($("rarity").value) || 8,
+  };
+
+  $("startBtn").disabled = true;
+  $("stopBtn").style.display = "block";
+  $("dlBtn").style.display = "none";
+  $("logBox").innerHTML = "";
+
+  try {
+    const r = await fetch("/api/start", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || "start failed");
+    currentJob = d.job_id;
+    addLog("info", `[job ${currentJob}] started — region=${payload.region} count=${payload.count} threads=${payload.threads}`);
+    pollTimer = setInterval(poll, 800);
+    poll();
+  } catch (e) {
+    addLog("err", "start error: " + e.message);
+    $("startBtn").disabled = false;
+  }
+});
+
+$("stopBtn").addEventListener("click", async () => {
+  if (!currentJob) return;
+  try {
+    await fetch("/api/stop/" + currentJob, { method: "POST" });
+    addLog("err", "[stop] signal sent");
+  } catch (e) {
+    addLog("err", "stop error: " + e.message);
+  }
+});
+
+$("dlBtn").addEventListener("click", () => {
+  if (!currentJob) return;
+  window.location.href = "/api/download/" + currentJob;
+});
+
+function addLog(level, msg) {
+  const box = $("logBox");
+  const div = document.createElement("div");
+  const cls = level === "success" ? "ok" : level === "error" ? "err" : "info";
+  div.className = cls;
+  const t = new Date().toLocaleTimeString();
+  div.textContent = `[${t}] ${msg}`;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+  while (box.children.length > 500) box.removeChild(box.firstChild);
+}
+
+async function poll() {
+  if (!currentJob) return;
+  try {
+    const r = await fetch("/api/status/" + currentJob);
+    const d = await r.json();
+    if (!d.ok) return;
+
+    $("s_success").textContent = d.success;
+    $("s_failed").textContent = d.failed;
+    $("s_rare").textContent = d.rare;
+    $("s_couples").textContent = d.couples;
+    $("progText").textContent = `${d.success} / ${d.count}`;
+    $("rateText").textContent = `${d.rate.toFixed(2)}/s · ${d.elapsed.toFixed(0)}s`;
+    const pct = Math.min(100, (d.success / Math.max(1, d.count)) * 100);
+    $("progBar").style.width = pct + "%";
+
+    // sync logs (only new lines)
+    const box = $("logBox");
+    const currentCount = box.dataset.count ? parseInt(box.dataset.count) : 0;
+    if (d.logs.length > currentCount) {
+      const newLogs = d.logs.slice(currentCount);
+      for (const L of newLogs) addLog(L.level === "success" ? "success" : L.level === "error" ? "error" : "info", L.msg);
+      box.dataset.count = d.logs.length;
+    }
+
+    if (d.finished) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+      addLog("info", `[job ${currentJob}] finished — success=${d.success} failed=${d.failed}`);
+      $("startBtn").disabled = false;
+      $("stopBtn").style.display = "none";
+      if (d.success > 0) $("dlBtn").style.display = "block";
+    }
+  } catch (e) {
+    // network hiccup, keep polling
+  }
+}
+</script>
+</body>
+</html>
